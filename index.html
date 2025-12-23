@@ -5,52 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TV Playlist</title>
   <style>
-    body { font-family: sans-serif; padding: 40px; }
-    code { background: #f3f3f3; padding: 2px 6px; border-radius: 4px; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
-  <h1>TV Playlist</h1>
-  <p>Tra <b id="sec">3</b>s apro: <code id="url"></code></p>
+
+<iframe id="viewer"></iframe>
 
 <script>
   const views = [
-    "https://view.monday.com/5088841383-534e28633b09383e46832d174404eb23?r=euc1&is_sharable_link=true",
-    "https://ipisrlita.sharepoint.com/:x:/s/UfficioTecnicoIPI/IQD3dUisyiIJTlx3sE_aRZXAV9prFKDnVorVOC6ASLu5U?e=FzCoXq"
-    // aggiungi altre URL qui, una per riga
+    { url: "https://view.monday.com/5088841383-534e28633b09383e46832d174404eb23?r=euc1&is_sharable_link=true", seconds: 10 },
+    { url: "https://ipisrlita.sharepoint.com/:x:/s/UfficioTecnicoIPI/IQD3dUIsyiIJTIx3sE_aRZxVAX9prfKDnVorV0C6ASLuw5U?e=xlB2J4", seconds: 10 },
+    { url: "LINK_EXCEL",   seconds: 45 }
   ];
 
-  const secondsPerPage = 30;     // tempo per schermata
-  const key = "tv_playlist_index";
-  const baseUrl = location.href.split("?")[0].split("#")[0];
+  let index = 0;
+  const iframe = document.getElementById("viewer");
 
-  let i = parseInt(localStorage.getItem(key) || "0", 10);
-  if (isNaN(i) || i < 0 || i >= views.length) i = 0;
+  function showNext() {
+    iframe.src = views[index].url;
+    const delay = views[index].seconds * 1000;
+    index = (index + 1) % views.length;
+    setTimeout(showNext, delay);
+  }
 
-  const current = views[i];
-  localStorage.setItem(key, String((i + 1) % views.length));
-
-  document.getElementById("url").textContent = current;
-
-  // countdown prima del redirect (così vedi sempre che sta funzionando)
-  let countdown = 3;
-  const secEl = document.getElementById("sec");
-
-  const timer = setInterval(() => {
-    countdown--;
-    secEl.textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(timer);
-
-      // dopo N secondi torna alla playlist per passare al prossimo
-      setTimeout(() => {
-        location.href = baseUrl + "?t=" + Date.now();
-      }, secondsPerPage * 1000);
-
-      // vai alla pagina da mostrare
-      location.replace(current);
-    }
-  }, 1000);
+  showNext();
 </script>
+
 </body>
 </html>
+
