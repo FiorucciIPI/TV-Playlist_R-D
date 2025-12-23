@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TV Playlist</title>
+
   <style>
     html, body {
       margin: 0;
@@ -11,6 +12,7 @@
       height: 100%;
       background: black;
     }
+
     iframe {
       border: none;
       width: 100%;
@@ -18,25 +20,43 @@
     }
   </style>
 </head>
+
 <body>
 
 <iframe id="viewer"></iframe>
 
 <script>
+  // ====== PLAYLIST ======
   const views = [
-    { url: "https://view.monday.com/5088841383-534e28633b09383e46832d174404eb23?r=euc1&is_sharable_link=true", seconds: 10 },
-    { url: "https://ipisrlita.sharepoint.com/:x:/s/UfficioTecnicoIPI/IQD3dUIsyiIJTIx3sE_aRZxVAX9prfKDnVorV0C6ASLuw5U?e=xlB2J4", seconds: 10 },
-    { url: "LINK_EXCEL",   seconds: 45 }
+    {
+      url: "https://view.monday.com/5088841383-534e28633b09383e46832d174404eb23?r=euc1&is_sharable_link=true",
+      seconds: 10
+    },
+    {
+      url: "https://ipisrlita.sharepoint.com/sites/UfficioTecnicoIPI/_layouts/15/Doc.aspx?sourcedoc={2c4275f7-22ca-4c09-8c77-b04fda459c55}&action=embedview&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=False",
+      seconds: 15
+    }
   ];
 
-  let index = 0;
+  // ====== LOGICA ======
   const iframe = document.getElementById("viewer");
+  let index = 0;
+  let timer = null;
 
   function showNext() {
-    iframe.src = views[index].url;
-    const delay = views[index].seconds * 1000;
+    if (timer) clearTimeout(timer);
+
+    const current = views[index];
     index = (index + 1) % views.length;
-    setTimeout(showNext, delay);
+
+    // pulizia iframe (fondamentale per SharePoint)
+    iframe.src = "about:blank";
+
+    setTimeout(() => {
+      iframe.src = current.url;
+    }, 300);
+
+    timer = setTimeout(showNext, current.seconds * 1000);
   }
 
   showNext();
@@ -44,4 +64,5 @@
 
 </body>
 </html>
+
 
