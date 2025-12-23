@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Monday TV</title>
+</head>
+<body>
+<script>
+  const views = [
+    "https://view.monday.com/5088841383-534e28633b9383e46832d174404eb23?r=euc1&is_sharable_link=true",
+    "https://ipisrlita.sharepoint.com/:x:/s/UfficioTecnicoIPI/IQD3dUisyiIJTlx3sE_aRZXAV9prFKDnVorVOC6ASLu5U?e=FzCoXq",
+    "LINK_VISTA_3_MONDAY"
+  ];
+
+  const seconds = 30; // tempo per schermata
+  const key = "monday_tv_index";
+  const baseUrl = location.href.split("?")[0];
+
+  let i = parseInt(localStorage.getItem(key) || "0", 10);
+  if (isNaN(i) || i >= views.length) i = 0;
+
+  localStorage.setItem(key, (i + 1) % views.length);
+
+  setTimeout(() => {
+    location.href = baseUrl + "?t=" + Date.now();
+  }, seconds * 1000*
