@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TV Playlist</title>
+</head>
+<body>
+<script>
+  // 1) METTI QUI I LINK (Monday share + Excel view)
+  const views = [
+    { url: "https://view.monday.com/5088841383-534e28633b09383e46832d174404eb23?r=euc1&is_sharable_link=true", seconds: 30 },
+    { url: "https://ipisrlita.sharepoint.com/:x:/s/UfficioTecnicoIPI/IQD3dUIsyiIJTIx3sE_aRZxVAX9prfKDnVorV0C6ASLuw5U?e=FzCoXq", seconds: 30 },
+    // aggiungi altre righe...
+  ];
+
+  // 2) Impostazioni
+  const key = "tv_playlist_index";
+  const baseUrl = location.href.split("?")[0].split("#")[0];
+
+  // 3) Legge indice corrente
+  let i = parseInt(localStorage.getItem(key) || "0", 10);
+  if (isNaN(i) || i < 0 || i >= views.length) i = 0;
+
+  const current = views[i];
+
+  // 4) Prepara prossimo indice
+  localStorage.setItem(key, String((i + 1) % views.length));
+
+  // 5) Torna alla playlist dopo N secondi, così passa al prossimo
+  setTimeout(() => { location.href = baseUrl + "?t=" + Date.now(); }, current.seconds * 1000);
+
+  // 6) Naviga subito alla pagina da mostrare
+  location.replace(current.url);
+</script>
+</body>
+</html>
